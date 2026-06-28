@@ -7,7 +7,7 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const sessions = await db.session.findMany({
-    where: { userId: session.user.id! },
+    where: { userId: session.user!.id! },
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { flashcards: true, questions: true } },
