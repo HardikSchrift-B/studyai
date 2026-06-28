@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  sessions  Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id         String      @id @default(cuid())
+  title      String
+  topic      String      @db.Text
+  notes      String      @db.LongText
+  createdAt  DateTime    @default(now())
+
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  flashcards Flashcard[]
+  questions  Question[]
+
+  @@map("sessions")
+}
+
+model Flashcard {
+  id        String  @id @default(cuid())
+  front     String  @db.Text
+  back      String  @db.Text
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("flashcards")
+}
+
+model Question {
+  id        String  @id @default(cuid())
+  question  String  @db.Text
+  options   String  @db.Text // JSON array of 4 options
+  answer    String
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("questions")
+}
