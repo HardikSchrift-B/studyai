@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         title: content.title,
         topic: topic,
         notes: content.notes,
-        userId: session.user.id!,
+        userId: session.user!.id!,
         flashcards: {
           create: content.flashcards.map((f: any) => ({
             front: f.front,
