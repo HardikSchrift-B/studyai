@@ -9,7 +9,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
   const { id } = await params;
 
   const studySession = await db.session.findUnique({
-    where: { id, userId: session.user.id! },
+    where: { id, userId: session.user!.id! },
     include: { flashcards: true, questions: true },
   });
 
@@ -24,6 +24,6 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
 
   const { id } = await params;
 
-  await db.session.delete({ where: { id, userId: session.user.id! } });
+  await db.session.delete({ where: { id, userId: session.user!.id! } });
   return NextResponse.json({ success: true });
 }
